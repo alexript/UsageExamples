@@ -23,8 +23,13 @@
  */
 package net.napilnik.usageexamples;
 
+import ca.odell.glazedlists.GlazedLists;
+import ca.odell.glazedlists.matchers.TextMatcherEditor;
+import ca.odell.glazedlists.swing.AutoCompleteSupport;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -37,8 +42,10 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
+        initData();
         initView();
-
+        applyGlazedlists();
+        reset();
     }
 
     /**
@@ -101,7 +108,7 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
-        myComboBox1.setSelectedItem(DEFAULT);
+        reset();
     }//GEN-LAST:event_resetButtonActionPerformed
 
     /**
@@ -146,36 +153,57 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField selectedTextField;
     // End of variables declaration//GEN-END:variables
 
-    
     private static final MyComboBoxItem DEFAULT = new MyComboBoxItem("NONAME");
-    
+
+    private List<MyComboBoxItem> data;
+
     private void initView() {
-        
+
         myComboBox1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String selectedItemText = myComboBox1.getSelectedItem().toString();
-                selectedTextField.setText(selectedItemText);
+                final Object selectedItem = myComboBox1.getSelectedItem();
+                if (selectedItem != null) {
+                    String selectedItemText = selectedItem.toString();
+                    selectedTextField.setText(selectedItemText);
+                } else {
+                    selectedTextField.setText("");
+                }
             }
         });
-        
+
         MyComboBoxModel aModel = new MyComboBoxModel();
-        aModel.addElement(DEFAULT);
-        aModel.addElement(new MyComboBoxItem("Bilbo"));
-        aModel.addElement(new MyComboBoxItem("Frodo"));
-        aModel.addElement(new MyComboBoxItem("Saruman"));
-        aModel.addElement(new MyComboBoxItem("Gendalf"));
-        aModel.addElement(new MyComboBoxItem("Pippin"));
-        aModel.addElement(new MyComboBoxItem("Gorlum"));
-        aModel.addElement(new MyComboBoxItem("Legolas"));
-        aModel.addElement(new MyComboBoxItem("Bilbo"));
-        aModel.addElement(new MyComboBoxItem("Sam"));
-        aModel.addElement(new MyComboBoxItem("Mery"));
-        aModel.addElement(new MyComboBoxItem("Aragorn"));
-        aModel.addElement(new MyComboBoxItem("Gimli"));
-        aModel.addElement(new MyComboBoxItem("Boromir"));
+        aModel.addAll(data);
         myComboBox1.setModel(aModel);
-        
+
+    }
+
+    private AutoCompleteSupport support;
+
+    private void applyGlazedlists() {
+        support = AutoCompleteSupport.install(myComboBox1, GlazedLists.eventList(data));
+        support.setFilterMode(TextMatcherEditor.CONTAINS);
+        support.setStrict(false);
+    }
+
+    public void reset() {
         myComboBox1.setSelectedItem(DEFAULT);
+    }
+
+    private void initData() {
+        data = new ArrayList<>();
+        data.add(DEFAULT);
+        data.add(new MyComboBoxItem("Bilbo"));
+        data.add(new MyComboBoxItem("Frodo"));
+        data.add(new MyComboBoxItem("Saruman"));
+        data.add(new MyComboBoxItem("Gendalf"));
+        data.add(new MyComboBoxItem("Pippin"));
+        data.add(new MyComboBoxItem("Gorlum"));
+        data.add(new MyComboBoxItem("Legolas"));
+        data.add(new MyComboBoxItem("Sam"));
+        data.add(new MyComboBoxItem("Mery"));
+        data.add(new MyComboBoxItem("Aragorn"));
+        data.add(new MyComboBoxItem("Gimli"));
+        data.add(new MyComboBoxItem("Boromir"));
     }
 }
