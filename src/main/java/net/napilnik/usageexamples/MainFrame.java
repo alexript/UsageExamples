@@ -28,6 +28,8 @@ import ca.odell.glazedlists.matchers.TextMatcherEditor;
 import ca.odell.glazedlists.swing.AutoCompleteSupport;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,12 +61,16 @@ public class MainFrame extends javax.swing.JFrame {
 
         myComboBox1 = new net.napilnik.usageexamples.MyComboBox();
         jLabel1 = new javax.swing.JLabel();
-        selectedTextField = new javax.swing.JTextField();
+        actionTextField = new javax.swing.JTextField();
         resetButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        selectTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Selected:");
+        jLabel1.setText("onAction");
+
+        actionTextField.setEditable(false);
 
         resetButton.setText("Reset");
         resetButton.addActionListener(new java.awt.event.ActionListener() {
@@ -72,6 +78,10 @@ public class MainFrame extends javax.swing.JFrame {
                 resetButtonActionPerformed(evt);
             }
         });
+
+        jLabel2.setText("onChange");
+
+        selectTextField.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -81,13 +91,17 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(myComboBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(selectedTextField))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 319, Short.MAX_VALUE)
-                        .addComponent(resetButton)))
+                        .addComponent(resetButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(actionTextField)
+                            .addComponent(selectTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -95,11 +109,15 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(myComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(selectTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(selectedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 195, Short.MAX_VALUE)
+                    .addComponent(actionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(resetButton)
                 .addContainerGap())
         );
@@ -147,10 +165,12 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField actionTextField;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private net.napilnik.usageexamples.MyComboBox myComboBox1;
     private javax.swing.JButton resetButton;
-    private javax.swing.JTextField selectedTextField;
+    private javax.swing.JTextField selectTextField;
     // End of variables declaration//GEN-END:variables
 
     private static final MyComboBoxItem DEFAULT = new MyComboBoxItem("NONAME");
@@ -165,9 +185,22 @@ public class MainFrame extends javax.swing.JFrame {
                 final Object selectedItem = myComboBox1.getSelectedItem();
                 if (selectedItem != null) {
                     String selectedItemText = selectedItem.toString();
-                    selectedTextField.setText(selectedItemText);
+                    actionTextField.setText(selectedItemText);
                 } else {
-                    selectedTextField.setText("");
+                    actionTextField.setText("");
+                }
+            }
+        });
+
+        myComboBox1.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                final Object selectedItem = myComboBox1.getSelectedItem();
+                if (selectedItem != null) {
+                    String selectedItemText = selectedItem.toString();
+                    selectTextField.setText(selectedItemText);
+                } else {
+                    selectTextField.setText("");
                 }
             }
         });
